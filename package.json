@@ -1,0 +1,31 @@
+{
+  "name": "react-native-smart-carousel",
+  "version": "1.0.0",
+  "description": "React native parallax carousel component",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:danielMensah/react-native-smart-carousel.git"
+  },
+  "dependencies": {},
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "carousel",
+    "swipeable",
+    "parallax",
+    "ios",
+    "android"
+  ],
+  "author": "Daniel Mensah <mensahezros@gmail.com>",
+  "license": "ISC",
+  "peerDependencies": {
+    "react-native": "^0.50.3"
+  },
+  "bugs": {
+    "url": "https://github.com/danielMensah/react-native-smart-carousel/issues"
+  },
+  "homepage": "https://github.com/danielMensah/react-native-smart-carousel#readme"
+}

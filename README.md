@@ -2,6 +2,10 @@
 
 [![npm version](https://img.shields.io/badge/npm%20package-v1.0.0-blue.svg)](https://www.npmjs.com/package/react-native-smart-carousel)
 
+## Preview
+
+![preview](https://raw.githubusercontent.com/danielMensah/react-native-smart-carousel/master/preview/preview1.gif)
+
 ## Get started
 
 ### Installation

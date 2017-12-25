@@ -20,7 +20,7 @@
     "android"
   ],
   "author": "Daniel Mensah <mensahezros@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.50.3"
   },

@@ -182,6 +182,8 @@ class SmartCarousel extends Component {
     const { data, height, overlayPath, titleColor, onPress } = this.props;
 
     return data.map((item, index) => {
+      const imagePath = typeof item.imagePath === 'number' ? item.imagePath : {uri: item.imagePath};
+
       return (
         <Animated.View
           key={item.id}
@@ -194,7 +196,7 @@ class SmartCarousel extends Component {
             activeOpacity={0.98}
           >
             <ImageBackground
-              source={item.imagePath}
+              source={imagePath}
               style={styles.itemImage}
             >
               {this._getOverlay(overlayPath, height)}

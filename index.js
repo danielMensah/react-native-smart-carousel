@@ -81,15 +81,14 @@ class SmartCarousel extends Component {
 
   _forceSwipe(direction) {
     const { autoPlay } = this.props;
-    const { screenWidth, currentItem } = this.state;
-
-    let distance = (direction === 'right') ? screenWidth : -screenWidth;
+    let distance = (direction === 'right') ? this.state.screenWidth : -this.state.screenWidth;
     // Calculate nextItem
+    const currentitem = this.state.currentItem;
     const totalItems = this.props.data.length;
     let newitem = (direction === 'right') ? currentitem - 1 : currentitem + 1;
 
     if (autoPlay && newitem === totalItems) {
-      distance = screenWidth * (totalItems - 1);
+      distance = this.state.screenWidth * (totalItems - 1);
       newitem = 0;
     }
 

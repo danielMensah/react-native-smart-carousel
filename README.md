@@ -12,18 +12,21 @@ Run: `$ npm install react-native-smart-carousel --save`
 
 ```javascript
 import Carousel from 'react-native-smart-carousel';
+import SnowmanImage from './images/snowman1';
+
+// imagePath can get images URL or imported images.
 
 const datacarousel = [
   {
       "id": 339964,
       "title": "This is snowman first title",
-      "imagePath": "https://cdn.pixabay.com/photo/2017/12/09/16/41/snow-man-3008179_1280.jpg",
+      "imagePath": "https://cdn.pixabay.com/photo/2017/12/09/16/41/snow-man-3008179_1280.jpg", // URL
   },
   {
       "id": 339403,
       "title": "Snowman",
       "subtitle": "The guy you want",
-      "imagePath": "https://cdn.pixabay.com/photo/2015/12/12/22/35/snowman-1090261_1280.jpg",
+      "imagePath": SnowmanImage, // imported
   },
 ];
 

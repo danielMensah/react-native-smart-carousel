@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
-import {
-  View,
-  ImageBackground,
-  Image,
-  Text,
-  TouchableOpacity,
-  Animated,
-  Dimensions,
-  PanResponder,
-} from 'react-native';
+import PropTypes  from 'prop-types';
+import { View, ImageBackground, Image, Text, TouchableOpacity, Animated, Dimensions, PanResponder } from 'react-native';
 import styles from './styles';
 
 const SWIPE_THRESHOLD = 0.25;
 var timer;
 
-class SwipeableParallaxCarousel extends Component {
-  // Default props
-  //
+class SmartCarousel extends Component {
+
+  // Default props //
   static defaultProps = {
     height: 200,
+    width: 400,
     navigationColor: '#ffffff',
     onPress: () => {},
     autoPlay: false,
     playTime: 5000
-  }
+  };
 
   // Class constructor
   //
@@ -34,10 +27,11 @@ class SwipeableParallaxCarousel extends Component {
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: (event, gesture) => {
-         return Math.abs(gesture.dx) > 5;
+        return Math.abs(gesture.dx) > 5;
       },
       onPanResponderGrant: () => {
         // Deactivate parent scrollview
+        // this.props.parentScrollViewRef.setNativeProps({ scrollEnabled: false });
         if (this.props.parentScrollViewRef) this.props.parentScrollViewRef.setNativeProps({ scrollEnabled: false });
       },
       onPanResponderMove: (event, gesture) => {
@@ -70,12 +64,13 @@ class SwipeableParallaxCarousel extends Component {
       screenWidth: Dimensions.get('window').width,
     };
 
-    if (this.props.autoPlay) {
+    const {autoPlay, playTime} = this.props;
+
+    if (autoPlay) {
       timer = setInterval(() => {
         this._forceSwipe('left');
-      }, this.props.playTime);
+      }, playTime);
     }
-
   }
 
   componentWillUnmount() {
@@ -83,29 +78,30 @@ class SwipeableParallaxCarousel extends Component {
   }
 
   // Force swipe
-  //
+
   _forceSwipe(direction) {
     const { autoPlay } = this.props;
-    const distance = (direction === 'right') ? this.state.screenWidth : -this.state.screenWidth;
+    const { screenWidth, currentItem } = this.state;
+
+    let distance = (direction === 'right') ? screenWidth : -screenWidth;
     // Calculate nextItem
-    const currentitem = this.state.currentItem;
     const totalItems = this.props.data.length;
-    const newitem = (direction === 'right') ? currentitem - 1 : currentitem + 1;
+    let newitem = (direction === 'right') ? currentitem - 1 : currentitem + 1;
 
     if (autoPlay && newitem === totalItems) {
-      distance = this.state.screenWidth * (totalItems - 1);
+      distance = screenWidth * (totalItems - 1);
       newitem = 0;
     }
 
     this.setState({ nextItem: newitem });
     Animated.spring(this.position, {
       toValue: { x: distance, y: 0 },
-    }).start(() => this._onSwipeComplete(direction, newitem));
+    }).start(() => this._onSwipeComplete(newitem));
   }
 
   // on SwipeComplete
   //
-  _onSwipeComplete(direction, newitem) {
+  _onSwipeComplete(newitem) {
     this.position.setValue({ x: 0, y: 0 });
     this.setState({ currentItem: newitem });
   }
@@ -121,7 +117,7 @@ class SwipeableParallaxCarousel extends Component {
   // Get overlay
   //
   _getOverlay(overlayPath, height) {
-    if (overlayPath) return <Image source={overlayPath} style={[styles.overlay, { height, width: this.state.screenWidth }]} />;
+    if (overlayPath) return <Image source={overlayPath} style={[styles.overlay, { height, width: this.state.screenWidth}]} />;
     return null;
   }
 
@@ -160,18 +156,22 @@ class SwipeableParallaxCarousel extends Component {
   //
   _getItemStyle(index) {
     const { position } = this;
+    const { currentItem, screenWidth } = this.state;
+    const { parallax } = this.props;
+
     // Current item zIndex (for parallax effect)
-    const zIndex = (index === this.state.currentItem) ? 0 : 1;
+    const zIndex = (index === currentItem) ? 0 : 1;
+
     // Default margin based on the item position
-    const defaultmargin = ((index - this.state.currentItem) * this.state.screenWidth);
-    let deltaleft = this.state.screenWidth;
-    if (this.props.parallax && index === this.state.currentItem) deltaleft = this.state.screenWidth / 4;
-    if (!this.props.parallax && this.state.currentItem === this.props.data.length - 1) deltaleft = this.state.screenWidth / 4;
-    let deltaright = this.state.screenWidth;
-    if (this.props.parallax && index === this.state.currentItem) deltaright = this.state.screenWidth / 4;
-    if (!this.props.parallax && this.state.currentItem === 0) deltaright = this.state.screenWidth / 4;
+    const defaultmargin = ((index - currentItem) * screenWidth);
+    let deltaleft = screenWidth;
+    if (parallax && index === currentItem) deltaleft = screenWidth / 4;
+    if (!parallax && currentItem === this.props.data.length - 1) deltaleft = screenWidth / 4;
+    let deltaright = screenWidth;
+    if (parallax && index === currentItem) deltaright = screenWidth / 4;
+    if (!parallax && currentItem === 0) deltaright = screenWidth / 4;
     const margin = position.x.interpolate({
-      inputRange: [-this.state.screenWidth, 0, this.state.screenWidth],
+      inputRange: [-screenWidth, 0, screenWidth],
       outputRange: [defaultmargin - deltaleft, defaultmargin, defaultmargin + deltaright],
     });
     return { left: margin, zIndex, elevation: zIndex };
@@ -180,13 +180,8 @@ class SwipeableParallaxCarousel extends Component {
   // Render items method
   //
   _renderItems() {
-    const {
-      data,
-      height,
-      overlayPath,
-      titleColor,
-      onPress
-    } = this.props;
+    const { data, height, overlayPath, titleColor, onPress } = this.props;
+
     return data.map((item, index) => {
       return (
         <Animated.View
@@ -200,7 +195,7 @@ class SwipeableParallaxCarousel extends Component {
             activeOpacity={0.98}
           >
             <ImageBackground
-              source={{ uri: item.imagePath }}
+              source={item.imagePath}
               style={styles.itemImage}
             >
               {this._getOverlay(overlayPath, height)}
@@ -215,9 +210,8 @@ class SwipeableParallaxCarousel extends Component {
   // Render navigation
   //
   _renderNavigation() {
-    const {
-      navigation,
-    } = this.props;
+    const { navigation } = this.props;
+
     if (navigation) {
       return (
         <View style={styles.navigationContainer}>
@@ -231,11 +225,7 @@ class SwipeableParallaxCarousel extends Component {
   // Render navigation item
   //
   _renderNavigationItems() {
-    const {
-      data,
-      navigationColor,
-      navigationType
-    } = this.props;
+    const { data, navigationColor, navigationType } = this.props;
     // Type of item (dots == default, bars, squares)
     let typeItem = null;
     if (navigationType === 'bars') typeItem = styles.navigationItemBars;
@@ -274,4 +264,21 @@ class SwipeableParallaxCarousel extends Component {
   }
 }
 
-export default SwipeableParallaxCarousel;
+SmartCarousel.propTypes = {
+  data: PropTypes.array.isRequired,
+  align: PropTypes.string,
+  titleColor: PropTypes.string,
+  navigation: PropTypes.bool,
+  parallax: PropTypes.bool,
+  overlayPath: PropTypes.any,
+  height: PropTypes.number,
+  navigationType: PropTypes.string,
+  width: PropTypes.number,
+  navigationColor: PropTypes.string,
+  onPress: PropTypes.func,
+  parentScrollViewRef: PropTypes.any,
+  autoPlay: PropTypes.bool,
+  playTime: PropTypes.number
+};
+
+export default SmartCarousel;

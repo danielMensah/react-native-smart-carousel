@@ -45,7 +45,7 @@ const datacarousel = [
 |**`data`**|An array with all your items. Read bellow about **Data array structure**. |*None*|Yes|
 |**`align`**|Title alignment. Could be `left`, `right` or `center`.|`left`|No|
 |**`autoPlay`**|Start auto scrolling of the carousel. Boolean `true` or `false`.|`false`|No|
-|**`playTime`**|Only works when `autoStart` is activated. It is the interval between each slide in `ms`.|`5000`|No|
+|**`playTime`**|Only works when `autoPlay` is activated. It is the interval between each slide in `ms`.|`5000`|No|
 |**`titleColor`**|Color title.|`#ffffff`|No|
 |**`navigation`**|Display a navigation bar or not. Boolean `true` or `false`.|`true`|No|
 |**`navigationColor`**|Color of the current item in the navigation bar.|`#ffffff`|No|

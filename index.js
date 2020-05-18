@@ -11,7 +11,7 @@ class SmartCarousel extends Component {
   // Default props //
   static defaultProps = {
     height: 200,
-    width: 400,
+    width: Dimensions.get('window').width,
     navigationColor: '#ffffff',
     onPress: () => {},
     autoPlay: false,
@@ -248,7 +248,7 @@ class SmartCarousel extends Component {
   // onLayout method to resize when orientation change
   //
   _onLayout() {
-    this.setState({ screenWidth: Dimensions.get('window').width });
+    this.setState({ screenWidth: this.props.width });
   }
 
   // Render method

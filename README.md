@@ -1,6 +1,6 @@
 # React Native Smart Carousel
 
-[![npm version](https://img.shields.io/badge/npm%20package-v1.0.0-blue.svg)](https://www.npmjs.com/package/react-native-smart-carousel)
+[![npm version](https://img.shields.io/badge/npm%20package-v1.1.0-blue.svg)](https://www.npmjs.com/package/react-native-smart-carousel)
 
 ## Preview
 
